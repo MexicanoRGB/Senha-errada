@@ -1,0 +1,50 @@
+#include <Servo.h>
+
+#include <Keypad.h>
+Servo servo;
+char matriz[4][4] = {
+
+  {'1','2','3','A'},
+  {'4','5','6','B'},
+  {'7','8','9','C'},
+  {'*','0','#','D'},
+};
+byte pinoLinhas[4] = {11,10,9,8};
+byte pinoColunas[4] = {7,6,5,4};
+
+byte qtdLinhas = 4;
+byte qtdColunas = 4;
+
+Keypad teclado = Keypad(makeKeymap(matriz), pinoLinhas, pinoColunas, qtdLinhas, qtdColunas);
+int indice = 0;
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  servo.attach(A5);
+  
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  char tecla = teclado.getKey();
+  char *senha = "2007";
+  
+  if (tecla){
+    Serial.println(tecla);
+    if (tecla == senha[indice]){
+        indice++;
+    }
+    else{
+      indice = 0;
+      
+    }
+    if (indice > 3){
+      Serial.println("aberto");
+      servo.write(159);
+      } else{
+      Serial.println("fechado");
+      servo.write(0);
+      }
+  }
+
+}
